@@ -1,11 +1,20 @@
-// src/components/Dashboard/SummaryCards.jsx
 import React from "react";
 
-export default function SummaryCards() {
+export default function SummaryCards({ transactions }) {
+  const income = transactions
+    .filter((t) => t.type === "income")
+    .reduce((acc, t) => acc + t.amount, 0);
+
+  const expenses = transactions
+    .filter((t) => t.type === "expense")
+    .reduce((acc, t) => acc + t.amount, 0);
+
+  const remaining = income - expenses;
+
   const summary = [
-    { label: "Total Income", amount: "₹50,000", color: "green" },
-    { label: "Total Expenses", amount: "₹30,000", color: "red" },
-    { label: "Remaining", amount: "₹20,000", color: "blue" },
+    { label: "Total Income", amount: `₹${income}`, color: "green" },
+    { label: "Total Expenses", amount: `₹${expenses}`, color: "red" },
+    { label: "Remaining", amount: `₹${remaining}`, color: "blue" },
   ];
 
   return (
