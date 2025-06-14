@@ -107,6 +107,6 @@ npm run dev
 
 Sachin Kumanache
 
-🔗 LinkedIn
+🔗 LinkedIn - (https://www.linkedin.com/in/sachin-kumanache)
 
-📫 GitHub
+📫 GitHub - (https://github.com/sachinkumanache/Personal-Finance-Tracker)
