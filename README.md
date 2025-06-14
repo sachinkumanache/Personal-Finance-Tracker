@@ -3,7 +3,8 @@ Track your income, expenses, budgets, and savings in one intuitive dashboard.
 Real-time insights powered by React, Firebase, and responsive Tailwind CSS styling.
 
 🔗 Live Demo: https://gleeful-cactus-a87853.netlify.app
-📁 GitHub Repo: Personal-Finance-Tracker
+
+📁 GitHub Repo:(https://github.com/sachinkumanache/Personal-Finance-Tracker)
 
 🚀 Features
 ✅ User Authentication (Login & Register with Firebase Auth)
@@ -26,7 +27,11 @@ Real-time insights powered by React, Firebase, and responsive Tailwind CSS styli
 
 🖼️ Screenshots
 
-(Add your actual screenshots to the /screenshots folder in your repo and update URLs)
+![Screenshot (497)](https://github.com/user-attachments/assets/54b13959-c4f7-49cc-b7cf-902b8b821f25)
+![Screenshot (494)](https://github.com/user-attachments/assets/fbaa4981-69ae-4905-9a44-e6bd45cf8be5)
+
+![Screenshot (495)](https://github.com/user-attachments/assets/9d15f394-bdec-4603-bfe4-508bd10e18ec)
+![Screenshot (496)](https://github.com/user-attachments/assets/307299ec-b287-401b-9d36-25319b92cb04)
 
 📦 Tech Stack
 Tech Usage
@@ -39,22 +44,32 @@ Axios API Calls to Firebase
 React Router Navigation
 
 📂 Folder Structure
-pgsql
-Copy
-Edit
 src/
+
 ├── components/
+
 │ ├── Auth/ (Login, Register)
+
 │ ├── Dashboard/ (SummaryCards, BudgetBar, ExpenseChart, etc.)
+
 ├── Pages/
+
 │ ├── Dashboard.jsx
+
 │ ├── Home.jsx
+
 ├── routes/
+
 │ ├── PrivateRoute.jsx
+
 ├── firebaseConfig.js
+
 ├── App.jsx
+
 ├── index.js
+
 🔐 Authentication
+
 Firebase handles registration and login.
 
 Auth state is managed using onAuthStateChanged.
@@ -62,9 +77,7 @@ Auth state is managed using onAuthStateChanged.
 Private routes are protected using a custom <PrivateRoute />.
 
 🛠️ How to Run Locally
-bash
-Copy
-Edit
+
 
 # 1. Clone the repo
 
@@ -80,16 +93,20 @@ npm install
 
 # 4. Set up Firebase
 
-# - Create Firebase project
+ - Create Firebase project
 
-# - Enable Authentication & Realtime Database
+ - Enable Authentication & Realtime Database
 
-# - Add your config to firebaseConfig.js
+ - Add your config to firebaseConfig.js
 
 # 5. Run the app
 
 npm run dev
+
 🙋‍♂️ Author
+
 Sachin Kumanache
+
 🔗 LinkedIn
+
 📫 GitHub
