@@ -1,3 +1,4 @@
+// 📁 Dashboard.jsx
 import React, { useEffect, useState } from "react";
 import SummaryCards from "../components/Dashboard/SummaryCards";
 import BudgetBar from "../components/Dashboard/BudgetBar";
@@ -6,21 +7,34 @@ import TransactionTable from "../components/Dashboard/TransactionTable";
 import AddTransactionModal from "../components/Dashboard/AddTransactionModal";
 import BudgetModal from "../components/Dashboard/BudgetModal";
 import axios from "axios";
-
-const API_TRANSACTIONS =
-  "https://personalfinanacetracker-default-rtdb.asia-southeast1.firebasedatabase.app/transactions.json";
-
-const API_BUDGETS =
-  "https://personalfinanacetracker-default-rtdb.asia-southeast1.firebasedatabase.app/budgets.json";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebaseConfig";
+import LogoutButton from "../components/Auth/LogoutButton";
 
 export default function Dashboard() {
   const [transactions, setTransactions] = useState([]);
   const [budgets, setBudgets] = useState([]);
+  const [userId, setUserId] = useState(null);
+
+  // 👤 Get current user ID
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserId(user.uid);
+      } else {
+        setUserId(null);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   // 🔄 Fetch Transactions
   const fetchTransactions = async () => {
+    if (!userId) return;
     try {
-      const res = await axios.get(API_TRANSACTIONS);
+      const res = await axios.get(
+        `https://personalfinanacetracker-default-rtdb.asia-southeast1.firebasedatabase.app/transactions/${userId}.json`
+      );
       const data = res.data || {};
       const formatted = Object.entries(data).map(([id, txn]) => ({
         id,
@@ -34,8 +48,11 @@ export default function Dashboard() {
 
   // 🔄 Fetch Budgets
   const fetchBudgets = async () => {
+    if (!userId) return;
     try {
-      const res = await axios.get(API_BUDGETS);
+      const res = await axios.get(
+        `https://personalfinanacetracker-default-rtdb.asia-southeast1.firebasedatabase.app/budgets/${userId}.json`
+      );
       const data = res.data || {};
       const formatted = Object.entries(data).map(([id, budget]) => ({
         id,
@@ -48,24 +65,34 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    fetchTransactions();
-    fetchBudgets();
-  }, []);
+    if (userId) {
+      fetchTransactions();
+      fetchBudgets();
+    }
+  }, [userId]);
 
   return (
     <div className="p-4 max-w-6xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4 text-center">Your Dashboard</h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-center">Your Dashboard</h2>
+        <LogoutButton />
+      </div>
 
       <div className="space-y-6">
         <SummaryCards transactions={transactions} />
         <BudgetBar transactions={transactions} budgets={budgets} />
-        <BudgetModal refreshBudgets={fetchBudgets} />
-        <AddTransactionModal onAdd={fetchTransactions} budgets={budgets} />
+        <BudgetModal refreshBudgets={fetchBudgets} userId={userId} />
+        <AddTransactionModal
+          onAdd={fetchTransactions}
+          budgets={budgets}
+          userId={userId}
+        />
         <ExpenseChart transactions={transactions} />
         <TransactionTable
           transactions={transactions}
           setTransactions={setTransactions}
           refreshData={fetchTransactions}
+          userId={userId}
         />
       </div>
     </div>

@@ -11,7 +11,7 @@ export default function BudgetBar({ transactions, budgets }) {
     }, {});
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-md">
+    <div className="bg-white p-4 rounded-lg shadow-md mt-6">
       <h3 className="text-lg font-semibold mb-4">
         Budget vs Expense (by Category)
       </h3>
@@ -21,20 +21,22 @@ export default function BudgetBar({ transactions, budgets }) {
       ) : (
         <div className="space-y-4">
           {budgets.map((budget) => {
-            const spent = categoryExpenses[budget.category] || 0;
-            const percentageUsed = Math.min((spent / budget.amount) * 100, 100);
-            const overBudget = spent > budget.amount;
+            const categoryName = budget.name;
+            const budgetLimit = parseFloat(budget.limit);
+            const spent = categoryExpenses[categoryName] || 0;
+            const percentageUsed = Math.min((spent / budgetLimit) * 100, 100);
+            const overBudget = spent > budgetLimit;
 
             return (
               <div key={budget.id}>
                 <div className="flex justify-between mb-1">
-                  <span className="font-medium text-sm">{budget.category}</span>
+                  <span className="font-medium text-sm">{categoryName}</span>
                   <span
                     className={`text-sm ${
                       overBudget ? "text-red-600" : "text-gray-700"
                     }`}
                   >
-                    ₹{spent} / ₹{budget.amount}
+                    ₹{spent} / ₹{budgetLimit}
                   </span>
                 </div>
 

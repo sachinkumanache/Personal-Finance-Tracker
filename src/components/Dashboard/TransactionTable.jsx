@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const API_URL =
-  "https://personalfinanacetracker-default-rtdb.asia-southeast1.firebasedatabase.app/transactions";
-
 export default function TransactionTable({
   transactions,
   setTransactions,
   refreshData,
+  userId,
 }) {
   const [filterMonth, setFilterMonth] = useState("");
   const [editingId, setEditingId] = useState(null);
@@ -20,7 +18,9 @@ export default function TransactionTable({
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${API_URL}/${id}.json`);
+      await axios.delete(
+        `https://personalfinanacetracker-default-rtdb.asia-southeast1.firebasedatabase.app/transactions/${userId}/${id}.json`
+      );
       refreshData();
     } catch (err) {
       console.error("Failed to delete:", err);
@@ -48,7 +48,10 @@ export default function TransactionTable({
         ...editForm,
         amount: parseFloat(editForm.amount),
       };
-      await axios.patch(`${API_URL}/${editingId}.json`, updatedData);
+      await axios.patch(
+        `https://personalfinanacetracker-default-rtdb.asia-southeast1.firebasedatabase.app/transactions/${userId}/${editingId}.json`,
+        updatedData
+      );
       setEditingId(null);
       refreshData();
     } catch (err) {
@@ -64,6 +67,14 @@ export default function TransactionTable({
   const months = Array.from(
     new Set(transactions.map((txn) => txn.date.slice(0, 7)))
   );
+
+  const getCategoryOptions = (type) => {
+    if (type === "income") {
+      return ["Salary", "Rent", "Other"];
+    } else {
+      return ["Food", "Education", "Movies", "Bills", "Rent", "Other"];
+    }
+  };
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-md">
@@ -121,13 +132,18 @@ export default function TransactionTable({
                       />
                     </td>
                     <td className="p-2">
-                      <input
+                      <select
                         name="category"
-                        type="text"
                         value={editForm.category}
                         onChange={handleEditChange}
                         className="border p-1 rounded w-full"
-                      />
+                      >
+                        {getCategoryOptions(editForm.type).map((cat) => (
+                          <option key={cat} value={cat}>
+                            {cat}
+                          </option>
+                        ))}
+                      </select>
                     </td>
                     <td className="p-2">
                       <input
@@ -211,13 +227,18 @@ export default function TransactionTable({
                 </div>
                 <div className="mb-2">
                   <label className="text-sm font-medium">Category</label>
-                  <input
+                  <select
                     name="category"
-                    type="text"
                     value={editForm.category}
                     onChange={handleEditChange}
                     className="border p-1 rounded w-full"
-                  />
+                  >
+                    {getCategoryOptions(editForm.type).map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="mb-2">
                   <label className="text-sm font-medium">Date</label>
